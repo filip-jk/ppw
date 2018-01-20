@@ -44,7 +44,7 @@ class Polynia_Product_Wizard {
 
 		// Plugin Options Page
 
-		//$this->settings_page();
+		$this->settings_page();
 
 		// Load predefined questions
 
@@ -54,18 +54,9 @@ class Polynia_Product_Wizard {
 
 		$this->load_products();
 
-
-
-
 		// Load Shortcode
 
 		$this->load_shortcode();
-//
-//		// Init Ajax
-//
-//		$this->plugin_ajax();
-//
-//
 
 
 	}
@@ -127,7 +118,7 @@ class Polynia_Product_Wizard {
 
 	function load_shortcode() {
 
-		require_once PPW_PATH . 'includes/shortcode.php';
+		require_once PPW_PATH . 'includes/ppw-shortcode.php';
 
 	}
 
@@ -203,6 +194,16 @@ class Polynia_Product_Wizard {
 				'example_data' => 'cokolwiek',
 //				'values' => $arg,
 //				'values2' => $arg2
+			)
+		);
+
+		wp_enqueue_script( 'ppw-admin-js', plugin_dir_url( __FILE__ ) . 'assets/js/ppw-admin.js', array( 'jquery' ) );
+
+		wp_localize_script(
+			'ppw-admin-js',
+			'ppw_wp_meta',
+			array(
+				'wp_ajax_url' => admin_url( 'admin-ajax.php' )
 			)
 		);
 

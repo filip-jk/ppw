@@ -7,87 +7,122 @@ class PPW_Products {
 
 	public function __construct() {
 
-		if ( ! function_exists( 'post_exists' ) ) {
-			require_once( ABSPATH . 'wp-admin/includes/post.php' );
-		}
-
 		$file = PPW_PATH . 'includes/data/default-products.php';
 
+		// if default products data exists
 		if ( is_file( $file ) ) {
 
 			$this->products = include $file;
+
 			if ( is_array( $this->products ) ) {
 
-				add_action( 'init', array($this, 'ppw_load_default_products') );
-
+				// default products data loaded successfully
 			}
-		}
 
+		} else {
+
+			//default products data could not be loaded
+
+		}
 
 		//add_action( 'init', array($this, 'ppw_get_all_post_types') );
 
 	}
 
-	public function ppw_load_default_products() {
+
+	/**
+	 * Load default products post types or restore default settings
+	 *
+//	 * @param string
+//	 * @param int
+	 *
+	 * @return boolean
+	 */
+
+	public function load_default_products() {
+
+		$response = true;
 
 		foreach ( $this->products as $product_name => $data) {
 
-			$this->ppw_insert_product( $product_name, $data);
+			 if ($this->insert_product( $product_name, $data) ) {
+
+			 	//product loaded or updated
+
+			 } else {
+
+			 	return false;
+			 }
 
 		}
 
+		return $response;
+
 	}
 
-	private function ppw_insert_product( $product_name, $data) {
+	private function insert_product( $product_name, $data) {
 
-		$prefix = 'ppw-';
+		$prefix = Polynia_Product_Wizard::$data_prefix;
 
 		$post = get_page_by_title( $product_name, OBJECT, 'polynia' );
 
-		//debug_to_console($post->ID);
+		//create new posts
+		if( $post == NULL ) {
 
-		//TUTAJ BLAD!!
-		if( 1 ) {
-			debug_to_console($product_name);
 			$post_information = array(
 				'post_type' => 'polynia',
 				'post_title' => $product_name
 			);
 
-			// to w zastępstwie chwilowo
-			$post_id = post_exists( $product_name ) or wp_insert_post( $post_information );
-
-			$post_id = $post->ID;
-
+			$post_id = wp_insert_post( $post_information );
 
 			wp_publish_post( $post_id );
 
+		} else {
 
-			update_post_meta( $post_id, $prefix . 'description' , $data['type'] );
-			update_post_meta( $post_id, $prefix . 'recommendation' , $data['recommendation'] );
-			update_post_meta( $post_id, prefix . 'q1-a1' , 8 );
-			foreach ( $data['questions'] as $question => $answers ) {
+			$post_id = $post->ID;
 
-				foreach ( $answers as $answer => $points) {
+		}
 
-					update_post_meta( $post_id, $prefix . $question . '-' . $answer , $points );
+		update_post_meta( $post_id, $prefix . 'description' , $data['type'] );
+		update_post_meta( $post_id, $prefix . 'recommendation' , $data['recommendation'] );
 
-				}
+		foreach ( $data['questions'] as $question => $answers ) {
+
+			foreach ( $answers as $answer => $points) {
+
+				update_post_meta( $post_id, $prefix . $question . '-' . $answer , $points );
 
 			}
 
+		}
 
-		} else {
+		//have to be validated
+		return true;
+
+	}
+
+	public function remove_all_default_posts() {
+
+		foreach ( $this->products as $product_name => $data) {
+
+			$post = get_page_by_title( $product_name, OBJECT, 'polynia' );
+
+			if( $post != NULL ) {
+
+				if ( get_post_status( $post->ID ) == 'trash' ) {
+
+				wp_delete_post($post->ID, $bypass_trash = true);
+
+				} else {
+
+					//removes also post types
+					wp_delete_post($post->ID, $bypass_trash = true);
 
 
-			if ( get_post_status ( $post->ID ) == 'trash' ) {
-
-				//kosz??
-				//wp_delete_post($post->ID, $bypass_trash = true);
+				}
 
 			} else {
-
-				//maybe update product values to default?
 
 			}
 
@@ -95,9 +130,19 @@ class PPW_Products {
 
 	}
 
-	public function ppw_get_all_post_types() {
+	private function remove_all_trashed_posts() {
+
+		$trash = get_posts('post_status=trash&numberposts=-1$post_type=\'polynia\'');
+
+		foreach($trash as $post) {
+
+			wp_delete_post($post->ID, $bypass_trash = true);
+		}
+
+	}
 
 
+	public function get_all_posts_data() {
 
 		$posts = array();
 
@@ -106,10 +151,7 @@ class PPW_Products {
 			'posts_per_page' => -1
 		));
 
-
-
-		//if( $query-> have_posts() ) {
-
+		if( $query-> have_posts() ) {
 
 			while ( $query->have_posts() ) {
 
@@ -119,16 +161,6 @@ class PPW_Products {
 				$post_id = get_the_ID();
 				$post_data = get_post_custom($post_id);
 
-//				$hidden_field = '_';
-//				foreach( $post_data as $key => $value ){
-//					if( !empty($value) ) {
-//						$pos = strpos($key, $hidden_field);
-//						if( $pos !== false && $pos == 0 ) {
-//							unset($post_data[$key]);
-//						}
-//					}
-//				}
-
 				array_push( $posts,
 					array(
 						'title' => $post_title,
@@ -137,9 +169,8 @@ class PPW_Products {
 					)
 				);
 
-
 			}
-		//}
+		}
 
 
 		wp_reset_query();
@@ -147,7 +178,6 @@ class PPW_Products {
 		return $posts;
 
 	}
-
 
 }
 

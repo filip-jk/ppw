@@ -41,11 +41,11 @@ class PPW_Metaboxes {
 
 	function ppw_filter_add_metaboxes( $meta_boxes ) {
 
-		$prefix = 'ppw-';
+		$prefix = Polynia_Product_Wizard::$data_prefix;
 
 		$meta_boxes[] = array(
 			'id' => $prefix . 'meta',
-			'title' => esc_html__( 'Untitled Metabox', 'ppw' ),
+			'title' => esc_html__( 'Product wizard data:', 'ppw' ),
 			'post_types' => array( 'polynia' ),
 			'context' => 'advanced',
 			'priority' => 'high',
@@ -54,13 +54,13 @@ class PPW_Metaboxes {
 				array(
 					'id' => $prefix . 'description',
 					'type' => 'textarea',
-					'name' => esc_html__( 'Textarea', 'ppw-domain' ),
+					'name' => esc_html__( 'Description', 'ppw' ),
 					'attributes' => array(),
 				),
 				array(
 					'id' => $prefix . 'recommendation',
 					'type' => 'textarea',
-					'name' => esc_html__( 'Textarea', 'ppw-domain' ),
+					'name' => esc_html__( 'Recommendation', 'ppw' ),
 				)
 
 			),
