@@ -60,10 +60,10 @@
 
 	                    ?>
 
-                        <div class="input-holder <?php echo($hide); ?>" id=<?php echo($question); ?> data-group=<?php echo($question_data['group']); ?>>
+                        <div class="ppw-input-holder <?php echo($hide); ?>" id=<?php echo('ppw-' . $question); ?> data-group=<?php echo($question_data['group']); ?>>
 
-                            <label for="kashing-firstname"><?php echo($question_data['value']); ?></label>
-                            <form>
+                            <label for="ppw-question-label"><?php echo($question_data['value']); ?></label>
+<!--                            <form>-->
 
 	                            <?php
 
@@ -82,7 +82,7 @@
 
                                  <?php } ?>
 
-                            </form>
+<!--                            </form>-->
 
                         </div>
 
