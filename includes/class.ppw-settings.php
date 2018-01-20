@@ -47,9 +47,7 @@ class PPW_Settings {
 
 		$ppw_products = new PPW_Products();
 
-		//$data = $ppw_products->remove_all_default_posts();
-
-		$data = $ppw_products->get_all_posts_data();
+		$data = $ppw_products->remove_all_default_posts();
 
 		$response = array(
 			'data' => $data

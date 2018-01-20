@@ -6,6 +6,7 @@ class PPW_Question {
 	private $questions = array(
 		'q1' => array (
 			'value' => 'Você vende de um lugar fixo ou nas ruas?',
+			'group' => 1,
 			'answers' => array(
 				'a1' => 'Nas ruas',
 				'a2' => 'Lugar fixo',
@@ -15,6 +16,7 @@ class PPW_Question {
 		),
 		'q2' => array (
 			'value' => 'Volume médio de vendas no cartão',
+			'group' => 1,
 			'answers' => array(
 				'a1' => 'até R$1 mil/mês',
 				'a2' => 'R$1 mil a R$5 mil/mês',
@@ -23,6 +25,7 @@ class PPW_Question {
 		),
 		'q3' => array (
 			'value' => 'Forma de pagamento mais aceita',
+			'group' => 2,
 			'answers' => array(
 				'a1' => 'Vendo mais no débito',
 				'a2' => 'Vendo mais no crédito',
@@ -31,6 +34,7 @@ class PPW_Question {
 		),
 		'q4' => array (
 			'value' => 'Parcelar é importante para você?',
+			'group' => 2,
 			'answers' => array(
 				'a1' => 'Sim',
 				'a2' => 'Não'
@@ -38,6 +42,7 @@ class PPW_Question {
 		),
 		'q5' => array (
 			'value' => 'De quais bandeiras você precisa?',
+			'group' => 2,
 			'answers' => array(
 				'a1' => 'Visa, MasterCard, Elo',
 				'a2' => 'Tem que aceitar HiperCard',
@@ -46,6 +51,7 @@ class PPW_Question {
 		),
 		'q6' => array (
 			'value' => 'Cartão-refeição?',
+			'group' => 2,
 			'answers' => array(
 				'a1' => 'Sim',
 				'a2' => 'Não'
@@ -53,6 +59,7 @@ class PPW_Question {
 		),
 		'q7' => array (
 			'value' => 'Máquina para Frente de Caixa?',
+			'group' => 3,
 			'answers' => array(
 				'a1' => 'Sim',
 				'a2' => 'Não',
@@ -62,6 +69,7 @@ class PPW_Question {
 		),
 		'q8' => array (
 			'value' => 'Você tem conta bancária?',
+			'group' => 3,
 			'answers' => array(
 				'a1' => 'Sim',
 				'a2' => 'Não'
@@ -69,6 +77,7 @@ class PPW_Question {
 		),
 		'q9' => array (
 			'value' => 'Em quanto tempo quer receber seu saldo?',
+			'group' => 3,
 			'answers' => array(
 				'a1' => 'Pago mais para receber rápido',
 				'a2' => 'Posso receber a cada 30 dias',
@@ -77,6 +86,7 @@ class PPW_Question {
 		),
 		'q10' => array (
 			'value' => 'Precisa que a máquina imprima recibo?',
+			'group' => 3,
 			'answers' => array(
 				'a1' => 'Sim',
 				'a2' => 'Não',

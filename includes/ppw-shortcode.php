@@ -9,7 +9,24 @@
 
 	        add_shortcode( 'polynia_product_wizard', array( $this,  'ppw_form_shortcode' ));
 
+	        add_action( 'wp_ajax_call_get_posts_data',  array( $this, 'ajax_get_posts_data' )  );
+	        add_action( 'wp_ajax_nopriv_call_get_posts_data', array( $this, 'ajax_get_posts_data' )  );
+
         }
+
+	    function ajax_get_posts_data() {
+
+		    $ppw_products = new PPW_Products();
+
+		    $data = $ppw_products->get_all_posts_data();
+
+		    $response = array(
+			    'data' => $data
+		    );
+
+		    wp_send_json_success( json_encode( $response ) );
+	    }
+
 
 	    public function add_shortcode_button( $editor_id ) {
 		    echo '<a href="#" class="button" id="add-ppw-wizard">' . esc_html__( 'Add PPW Form', 'ppw' ) . '</a>';
@@ -20,20 +37,70 @@
 
 		    wp_enqueue_style( 'kashing-frontend-js' );
 
-		    ?>
+		    $num_of_groups = '1/3';
 
-<!--            tutaj tak testowo czy dziala cokolwiek :) -->
-        <form id="kashing-form" class="kashing-form" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="POST">
+			    ?>
 
-            <div class="input-holder">
-                <label for="kashing-firstname"><?php esc_html_e('First Name', 'kashing'); ?></label>
-                <input type="text" name="firstname" id="kashing-firstname" class="kashing-required-field" value="Ten">
-            </div>
+                <form id="ppw-form" class="ppw-form">
 
-        </form>
+                    <div id="ppw-progress"> <?php echo($num_of_groups); ?>  </div>
 
-		    <?php
-		    add_shortcode( 'polynia_product_wizard', 'ppw_form_shortcode' );
+                    <?php
+
+                    $ppw_questions = new PPW_Question();
+                    $questions = $ppw_questions->get_all_questions();
+
+                    foreach ( $questions as $question => $question_data) {
+
+                        $hide = 'hidden';
+
+                        if( $question_data['group'] == 1 ) {
+                            $hide = '';
+                        }
+
+	                    ?>
+
+                        <div class="input-holder <?php echo($hide); ?>" id=<?php echo($question); ?> data-group=<?php echo($question_data['group']); ?>>
+
+                            <label for="kashing-firstname"><?php echo($question_data['value']); ?></label>
+                            <form>
+
+	                            <?php
+
+	                                 foreach ( $question_data['answers'] as $answer_id => $answer_data) {
+
+	                                     $radio_name = 'ppw-form-' . $question;
+	                                     $radio_id =  $radio_name . $answer_id;
+                                 ?>
+
+                                         <input type="radio"
+                                                id=<?php echo($radio_id); ?>
+                                                name=<?php echo($radio_name); ?>
+                                                value=<?php echo($answer_id); ?>>
+		                                    <?php echo($answer_data); ?>
+                                         <br>
+
+                                 <?php } ?>
+
+                            </form>
+
+                        </div>
+
+	                    <?php
+                    }
+                        ?>
+
+                    <button class="ppw-button-left hidden" id="ppw-button-back" type="button"><?php esc_html_e('Back', 'ppw' ); ?></button>
+
+                    <button disabled class="ppw-button-right"  id="ppw-button-next" type="button"><?php esc_html_e('Next', 'ppw' ); ?></button>
+
+                    <button class="ppw-button-right hidden" id="ppw-button-finish" type="button"><?php esc_html_e('Get results', 'ppw' ); ?></button>
+
+                </form>
+
+			    <?php
+
+		    //add_shortcode( 'polynia_product_wizard', 'ppw_form_shortcode' );
         }
 
     }

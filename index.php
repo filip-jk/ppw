@@ -222,11 +222,10 @@ class Polynia_Product_Wizard {
 		// Localize the frontend JavaScript
 
 		wp_localize_script(
-			'kashing-frontend-js',
-			'kashing_wp_object',
+			'ppw-frontend-js',
+			'ppw_wp_meta',
 			array(
-				'wp_ajax_url' => admin_url( 'admin-ajax.php' ),
-				'page_id' => get_the_ID()
+				'wp_ajax_url' => admin_url( 'admin-ajax.php' )
 			)
 		);
 
