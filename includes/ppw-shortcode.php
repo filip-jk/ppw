@@ -43,7 +43,7 @@
 
                 <form id="ppw-form" class="ppw-form">
 
-                    <div id="ppw-progress"> <?php echo($num_of_groups); ?>  </div>
+                    <div id="ppw-progress" class="'ppw-progress-class"> <?php echo($num_of_groups); ?>  </div>
 
                     <?php
 
@@ -69,7 +69,7 @@
 
 	                                 foreach ( $question_data['answers'] as $answer_id => $answer_data) {
 
-	                                     $radio_name = 'ppw-form-' . $question;
+	                                     $radio_name = 'ppw-' . $question . '-form';
 	                                     $radio_id =  $radio_name . $answer_id;
                                  ?>
 
@@ -86,6 +86,7 @@
 
                         </div>
 
+                        <div id="ppw-results" class="ppw-results-class hidden"> <?php echo($num_of_groups); ?>  </div>
 	                    <?php
                     }
                         ?>
