@@ -58,6 +58,8 @@ class Polynia_Product_Wizard {
 
 		$this->load_shortcode();
 
+		add_filter( 'manage_polynia_posts_columns', array( $this, 'register_post_type_columns' ) ); // manage_{post_type_slug}_posts_columns
+		add_action( 'manage_polynia_posts_custom_column', array( $this, 'manage_post_type_columns' ), 10, 2 ); // manage_{post_type_slug}_posts_custom_columns
 
 	}
 
@@ -164,6 +166,32 @@ class Polynia_Product_Wizard {
 
 		register_post_type( 'polynia' , $args );
 
+	}
+
+	public function register_post_type_columns( $columns ) {
+		$columns['description'] = __( 'Description', 'ppw' );
+		$columns['recommendation'] = __( 'Recommendation', 'ppw' );
+		unset( $columns['date'] );
+		$columns['date'] = __( 'Date', 'ppw' );
+		return $columns;
+	}
+
+	public function manage_post_type_columns( $column, $post_id ) {
+		$prefix = Polynia_Product_Wizard::$data_prefix;
+		switch ( $column ) {
+			case 'description':
+				if ( get_post_meta( $post_id, $prefix . 'description', true ) ) {
+					echo esc_html( get_post_meta( $post_id, $prefix . 'description', true ) );
+
+				}
+				break;
+			case 'recommendation':
+				if ( get_post_meta( $post_id, $prefix . 'recommendation', true ) ) {
+					echo esc_html( get_post_meta( $post_id, $prefix . 'recommendation', true ) );
+
+				}
+				break;
+		}
 	}
 
 
