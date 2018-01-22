@@ -151,6 +151,7 @@ class PPW_Products {
 			'posts_per_page' => -1
 		));
 
+
 		if( $query-> have_posts() ) {
 
 			while ( $query->have_posts() ) {

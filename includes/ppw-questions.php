@@ -109,6 +109,8 @@ class PPW_Question {
 		0 => 'Exclude'
 	);
 
+	private $deafult_question_groups = 3;
+
 	public function __construct() {
 
 	}

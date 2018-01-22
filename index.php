@@ -58,9 +58,19 @@ class Polynia_Product_Wizard {
 
 		$this->load_shortcode();
 
+		$this->load_functions();
+
 		add_filter( 'manage_polynia_posts_columns', array( $this, 'register_post_type_columns' ) ); // manage_{post_type_slug}_posts_columns
 		add_action( 'manage_polynia_posts_custom_column', array( $this, 'manage_post_type_columns' ), 10, 2 ); // manage_{post_type_slug}_posts_custom_columns
 
+
+//		$get = get_option('ppw_settings');;
+//		echo '<div>';
+//print_r($get);
+//echo '</div>';
+//
+//echo $get;
+//debug_to_console($get);
 	}
 
 	/**
@@ -89,7 +99,7 @@ class Polynia_Product_Wizard {
 
 	function load_functions() {
 
-		require_once PPW_PATH . 'include/ppw-functions.php';
+		require_once PPW_PATH . 'includes/ppw-functions.php';
 
 	}
 

@@ -41,10 +41,8 @@ class PPW_Metaboxes {
 
 	function ppw_filter_add_metaboxes( $meta_boxes ) {
 
-		$prefix = Polynia_Product_Wizard::$data_prefix;
-
 		$meta_boxes[] = array(
-			'id' => $prefix . 'meta',
+			'id' => $this->prefix . 'meta',
 			'title' => esc_html__( 'Product wizard data:', 'ppw' ),
 			'post_types' => array( 'polynia' ),
 			'context' => 'advanced',

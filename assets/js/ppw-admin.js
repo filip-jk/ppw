@@ -70,6 +70,44 @@
         });
 
 
+        $( '#ppw-button-load-groups' ).on( 'click', function() {
+
+            $.ajax ({
+                url: ppw_wp_meta.wp_ajax_url,
+                type: 'POST',
+                dataType: 'JSON',
+                data: {
+                    action: 'call_load_default_question_groups'
+                },
+                success: function ( resp ) {
+
+                    if ( resp.success ) {
+
+                        var response = JSON.parse( resp.data );
+
+                        if ( resp.success ) {
+
+                            alert ( response['response'] ) ;
+
+                        } else {
+
+                            alert ( response['response'] ) ;
+                        }
+
+                    } else {
+
+                        alert ( 'Not loaded.' ) ;
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+
+                    alert ('Request failed') ;
+                },
+            }) ;
+
+        });
+
+
     });
 
 } ) ( jQuery );
