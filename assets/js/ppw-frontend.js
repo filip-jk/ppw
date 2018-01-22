@@ -32,8 +32,6 @@
 
                     if ( resp.success ) {
 
-                        init_questions();
-
                         var response_data = response['data'];
 
                         products = init_products( response_data );
@@ -45,6 +43,7 @@
                     } else {
 
                         alert ( 'response error' ) ;
+
                     }
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
@@ -55,11 +54,17 @@
         }
 
 
+
         $( '#ppw-button-next' ).on( 'click', function() {
 
-            count_points( groups[ page ], products );
-            change_progress( 1 );
-            load_questions( page, page-1, groups);
+            //to be sure all data is loaded
+            if ( ! $( this ).hasClass( 'disabled' ) ) {
+
+                count_points( groups[ page ], products );
+                change_progress( 1 );
+                load_questions( page, page-1, groups);
+
+            }
 
         });
 
@@ -84,7 +89,15 @@
         //if AJAX is successful initialize things
         function init_form() {
 
-            $( '#ppw-button-next' ).removeAttr( 'disabled' );
+            init_questions();
+
+            for( var qs in groups[ 1 ] ){
+
+                $( '#' + groups[ 1 ][ qs ] ).removeClass( 'hidden' );
+
+            }
+
+           $( '#ppw-button-next' ).removeClass( 'disabled' );
 
         }
 
@@ -94,7 +107,7 @@
 
                 page += value;
 
-                //show it somehow
+                //temporary show it somehow
                 $( '#ppw-progress' ).html(page + '/' + num_of_groups );
 
                 //back button appearance
@@ -104,7 +117,12 @@
 
                 } else {
 
-                    $( '#ppw-button-back' ).removeClass( 'hidden' );
+                    //is it necessary?
+                    if( $( '#ppw-button-back' ).hasClass( 'hidden' ) ) {
+
+                        $( '#ppw-button-back' ).removeClass( 'hidden' );
+
+                    }
 
                 }
 
@@ -125,6 +143,12 @@
             }
         }
 
+        /**
+         * Group questions based on their group id
+         *
+         * e.g. groups[1] = [ 'ppw-q1', 'ppw-q2' ]
+         */
+
         function init_questions() {
 
             $( '#ppw-form' ).find( '.ppw-input-holder' ).each( function() {
@@ -142,7 +166,14 @@
                     groups[ questions_groups[ qg ] ].push(qg);
                 }
             }
+
         }
+
+        /**
+         * Create new structure holding products data with their respective score and exclusion data
+         *
+         * @return products data structure (string: 'title', array: 'data', number: 'points', boolean: 'excluded')
+         */
 
         function init_products( products_data ) {
 
@@ -163,6 +194,11 @@
 
         }
 
+        /**
+         * Show appropriate question group based on a page number
+         *
+         */
+
         function load_questions( page, previous_page, groups ) {
 
             for( var qs in groups[ previous_page ] ){
@@ -171,7 +207,6 @@
 
             }
 
-            console.log(groups[ page ]);
             for( var qs in groups[ page ] ){
 
                 $( '#' + groups[ page ][ qs ] ).removeClass( 'hidden' );
@@ -180,52 +215,58 @@
 
         }
 
+        /**
+         * Main function responsible for counting points or excluding products
+         *
+         */
+
         function count_points( groups, products, direction) {
 
             direction = direction || 1;
 
             for( var qnum in groups ) {
 
-                var current_question = groups[qnum] + '-form';
+                var current_question = groups[ qnum ] + '-form';
 
-                var value = $( 'input[name=' + current_question + ']:checked').val();
+                var value = $( 'input[name=' + current_question + ']:checked' ).val();
 
                 //np ppw-q1-a2
-                var chosen_question_id = groups[qnum] + "-" + value;
+                var chosen_question_id = groups[ qnum ] + "-" + value;
 
-                for( var product_num in products) {
+                for( var product_num in products ) {
 
-                    var product = products[product_num]
+                    var product = products[ product_num ]
 
-                    if( product.excluded != true ) {
+                    var question_points = product.data[ chosen_question_id ][ 0 ];
 
-                        var question_points = product.data[chosen_question_id][0];
+                    if( question_points == 0 ) {
 
-                        if (question_points == 0) {
+                        if( direction === 1 ) {
 
                             product.excluded = true;
 
                         } else {
 
-                            product.points += Number(question_points) * direction;
+                            product.excluded = false;
 
                         }
+
                     } else {
 
-                        //product excluded
+                        product.points += Number( question_points ) * direction;
 
                     }
-
-                    //poodbnie np z q1-a1
-                    //  console.log(product.data['ppw-description'][0])
 
                 }
 
             }
 
-            console.log(products);
-
         }
+
+        /**
+         * Hiding all elements and showing results
+         *
+         */
 
         function show_results() {
 

@@ -54,6 +54,7 @@
 
                         $hide = 'hidden';
 
+                        //add this to preload fist group questions
                         if( $question_data['group'] == 1 ) {
                             $hide = '';
                         }
@@ -86,14 +87,14 @@
 
                         </div>
 
-                        <div id="ppw-results" class="ppw-results-class hidden"> <?php echo($num_of_groups); ?>  </div>
+                        <div id="ppw-results" class="ppw-results-class hidden">  </div>
 	                    <?php
                     }
                         ?>
 
                     <button class="ppw-button-left hidden" id="ppw-button-back" type="button"><?php esc_html_e('Back', 'ppw' ); ?></button>
 
-                    <button disabled class="ppw-button-right"  id="ppw-button-next" type="button"><?php esc_html_e('Next', 'ppw' ); ?></button>
+                    <button class="ppw-button-right disabled"  id="ppw-button-next" type="button"><?php esc_html_e('Next', 'ppw' ); ?></button>
 
                     <button class="ppw-button-right hidden" id="ppw-button-finish" type="button"><?php esc_html_e('Get results', 'ppw' ); ?></button>
 
