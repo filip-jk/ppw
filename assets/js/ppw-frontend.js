@@ -17,7 +17,7 @@
         var products = [];
 
 
-        if($('#ppw-form').is('.ppw-form')){
+        if ( $( '#ppw-form' ).is( '.ppw-form' ) ) {
 
             $.ajax ({
                 url: ppw_wp_meta.wp_ajax_url,
@@ -184,21 +184,19 @@
 
                 page += value;
 
-                //temporary show it somehow
-                $( '#ppw-progress' ).html(page + '/' + num_of_groups );
+                // temporary show it somehow
 
-                //back button appearance
-                if(page < 2){
+                $( '#ppw-progress .ppw-progress-current' ).text( page );
 
+                // back button appearance
+
+                if ( page < 2 ){
                     $( '#ppw-button-back' ).addClass( 'hidden' );
-
                 } else {
-
                     //is it necessary?
+
                     if( $( '#ppw-button-back' ).hasClass( 'hidden' ) ) {
-
                         $( '#ppw-button-back' ).removeClass( 'hidden' );
-
                     }
 
                 }
@@ -347,13 +345,13 @@
 
         function show_results() {
 
-
-             $('#ppw-progress').addClass('hidden');
-             $('#ppw-button-finish').addClass('hidden');
-             $('#ppw-button-back').addClass('hidden');
-             $('#ppw-results').removeClass('hidden');
+             $('#ppw-progress').addClass( 'hidden' );
+             $('#ppw-button-finish').addClass( 'hidden' );
+             $('#ppw-button-back').addClass( 'hidden' );
+             $('#ppw-results').removeClass( 'hidden' );
 
             //sort descending
+
             products.sort( function( a, b ) {
 
                     if (a.points < b.points) {
@@ -367,6 +365,7 @@
             );
 
             //products to show
+
             var show_number = 3;
 
             for( var product_num in products) {
@@ -381,8 +380,12 @@
                     console.log(product.title + ' | ' + product.points + ' | ' + product.excluded
                         + ' | ' + product_description + ' | ' + product_recommendation);
 
-                    $('#ppw-results').append('<p>' + (product.title + ' | ' + product.points + ' | ' + product.excluded
-                        + ' | ' + product_description + ' | ' + product_recommendation) + '</p>');
+                    //$('#ppw-results').append( '<p>' + (product.title + ' | ' + product.points + ' | ' + product.excluded
+                    //    + ' | ' + product_description + ' | ' + product_recommendation) + '</p>' );
+
+                    // Append to a table
+
+                    $( '#ppw-results table' ).append( '<tr><td><a href="#">' + product.title + '</a></td><td>' + product.points + '</td><td>' + product_description + '</td><td>' + product_recommendation + '</td></tr>');
 
                     show_number--;
                 } else {

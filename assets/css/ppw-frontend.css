@@ -2,7 +2,7 @@
 
 }
 
- .hidden {
+ .ppw-form .hidden {
      display: none;
  }
 
@@ -21,4 +21,61 @@
  .ppw-button-right {
      background-color: #e7e7e7;
      color: black;
+ }
+
+ /* Form Styling */
+
+ /* Form Progress */
+
+ .ppw-progress {
+    font-size: 36px;
+     margin-bottom: 20px;
+     color: #aaa;
+ }
+
+    .ppw-progress-current {
+        color: #0f559b;
+    }
+
+    .ppw-progress-total {
+        color: #777;
+    }
+
+    .ppw-progress-slash {
+        padding: 0 4px;
+    }
+
+ /* Form Questions */
+
+ .ppw-question-title {
+     display: block;
+     font-size: 19px;
+ }
+
+ .ppw-answer-wrap {
+     display: block;
+     margin-bottom: 6px;
+     cursor: pointer;
+     font-size: 16px;
+ }
+
+ .ppw-answer-wrap input {
+     margin-right: 7px;
+     position: relative;
+     top: -1px;
+ }
+
+ .ppw-answer-wrap input:checked + span {
+     color: #0f559b;
+ }
+
+ .ppw-question {
+     margin-bottom: 25px;
+ }
+
+ /* Form Buttons */
+
+ .button.ppw-button-right {
+     background: #0f559b;
+     color: #fff;
  }

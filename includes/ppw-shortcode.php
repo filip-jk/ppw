@@ -39,77 +39,90 @@
 
 		    wp_enqueue_style( 'kashing-frontend-js' );
 
-		    $num_of_groups = '1/3';
+            // Shortcode output
 
-			    ?>
+            ob_start();
+
+		    $num_of_groups = '<span class="ppw-progress-current">1</span><span class="ppw-progress-slash">/</span><span class="ppw-progress-total">3</span>';
+
+		    ?>
 
                 <form id="ppw-form" class="ppw-form">
 
-                    <div id="ppw-progress" class="'ppw-progress-class"> <?php echo($num_of_groups); ?>  </div>
+                    <div id="ppw-progress" class="ppw-progress"> <?php echo( $num_of_groups ); ?>  </div>
 
                     <?php
 
                     $ppw_questions = new PPW_Question();
                     $questions = $ppw_questions->get_all_questions();
-
                     $groups_number = ppw_option('ppw-group-number' );
 
                     foreach ( $questions as $question => $question_data) {
 
                         $hide = 'hidden';
-
 	                    $group = ppw_option('ppw-' . $question . '-number') + 1;
 
-                        //add this to preload fist group questions
-                        if( $group == 1 ) {
+                        // add this to preload fist group questions
+
+                        if ( $group == 1 ) {
                             $hide = '';
                         }
 
-	                   // data-group=<?php echo($question_data['group'])
 	                    ?>
 
-                        <div required class="ppw-input-holder <?php echo($hide); ?>" id=<?php echo('ppw-' . $question); ?> data-group=<?php echo($group); ?>>
+                        <div required class="ppw-input-holder ppw-question <?php echo($hide); ?>" id=<?php echo('ppw-' . $question); ?> data-group=<?php echo($group); ?>>
 
-                            <label for="ppw-question-label"><?php echo($question_data['value']); ?></label>
-<!--                            <form>-->
+                            <h5 class="ppw-question-title"><?php echo($question_data['value']); ?></h5>
 
 	                            <?php
 
-	                                 foreach ( $question_data['answers'] as $answer_id => $answer_data) {
+                                foreach ( $question_data['answers'] as $answer_id => $answer_data ) {
 
-	                                     $radio_name = 'ppw-' . $question . '-form';
-	                                     $radio_id =  $radio_name . $answer_id;
-                                 ?>
-
-                                         <input type="radio"
-                                                id=<?php echo($radio_id); ?>
-                                                name=<?php echo($radio_name); ?>
-                                                value=<?php echo($answer_id); ?>>
-		                                    <?php echo($answer_data); ?>
-                                         <br>
-
-                                 <?php } ?>
-
-<!--                            </form>-->
+                                    $radio_name = 'ppw-' . $question . '-form';
+                                    $radio_id =  $radio_name . $answer_id;
+                                    ?>
+                                    <label class="ppw-answer-wrap"><input type="radio"
+                                                                          id=<?php echo esc_attr( $radio_id ); ?>
+                                                                          name=<?php echo esc_attr( $radio_name ); ?>
+                                                                          value=<?php echo esc_attr( $answer_id ); ?>>
+                                        <span class="ppw-answer-label"><?php echo esc_html( $answer_data ); ?></span>
+                                    </label>
+                                <?php
+                                }
+                                ?>
 
                         </div>
 
-                        <div id="ppw-results" class="ppw-results-class hidden">  </div>
 	                    <?php
-                    }
+                        }
                         ?>
 
-                    <button class="ppw-button-left hidden" id="ppw-button-back" type="button"><?php esc_html_e('Back', 'ppw' ); ?></button>
+                    <div id="ppw-results" class="ppw-results-class hidden">
+                        <h3>Results:</h3>
+                        <table>
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Points</th>
+                                <th>Description</th>
+                                <th>Why we suggest it?</th>
+                            </tr>
 
-                    <button class="ppw-button-right disabled"  id="ppw-button-next" type="button"><?php esc_html_e('Next', 'ppw' ); ?></button>
+                        </table>
+                    </div>
 
-                    <button class="ppw-button-right hidden" id="ppw-button-finish" type="button"><?php esc_html_e('Get results', 'ppw' ); ?></button>
+                    <button class="button pw-button-left ppw-button-prev hidden" id="ppw-button-back" type="button"><?php esc_html_e('Back', 'ppw' ); ?></button>
+                    <button class="button ppw-button-right ppw-button-next disabled"  id="ppw-button-next" type="button"><?php esc_html_e('Next', 'ppw' ); ?></button>
+                    <button class="button ppw-button-right ppw-button-finish hidden" id="ppw-button-finish" type="button"><?php esc_html_e('Get results', 'ppw' ); ?></button>
 
                 </form>
 
-			    <?php
+            <?php
 
-		    //add_shortcode( 'polynia_product_wizard', 'ppw_form_shortcode' );
+            $content = ob_get_contents(); // End content "capture" and store it into a variable.
+            ob_end_clean();
+
+            return $content; // Return the shortcode content
+
         }
 
     }

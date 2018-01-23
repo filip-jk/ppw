@@ -50,13 +50,13 @@ class PPW_Metaboxes {
 			'autosave' => false,
 			'fields' => array(
 				array(
-					'id' => $prefix . 'description',
+					'id' => $this->prefix . 'description',
 					'type' => 'textarea',
 					'name' => esc_html__( 'Description', 'ppw' ),
 					'attributes' => array(),
 				),
 				array(
-					'id' => $prefix . 'recommendation',
+					'id' => $this->prefix . 'recommendation',
 					'type' => 'textarea',
 					'name' => esc_html__( 'Recommendation', 'ppw' ),
 				)
