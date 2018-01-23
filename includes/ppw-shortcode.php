@@ -19,9 +19,11 @@
 		    $ppw_products = new PPW_Products();
 
 		    $data = $ppw_products->get_all_posts_data();
+		    $groups_number = ppw_option('ppw-group-number' );
 
 		    $response = array(
-			    'data' => $data
+			    'data' => $data,
+                'groups' => $groups_number
 		    );
 
 		    wp_send_json_success( json_encode( $response ) );
@@ -50,18 +52,23 @@
                     $ppw_questions = new PPW_Question();
                     $questions = $ppw_questions->get_all_questions();
 
+                    $groups_number = ppw_option('ppw-group-number' );
+
                     foreach ( $questions as $question => $question_data) {
 
                         $hide = 'hidden';
 
+	                    $group = ppw_option('ppw-' . $question . '-number') + 1;
+
                         //add this to preload fist group questions
-                        if( $question_data['group'] == 1 ) {
+                        if( $group == 1 ) {
                             $hide = '';
                         }
 
+	                   // data-group=<?php echo($question_data['group'])
 	                    ?>
 
-                        <div class="ppw-input-holder <?php echo($hide); ?>" id=<?php echo('ppw-' . $question); ?> data-group=<?php echo($question_data['group']); ?>>
+                        <div required class="ppw-input-holder <?php echo($hide); ?>" id=<?php echo('ppw-' . $question); ?> data-group=<?php echo($group); ?>>
 
                             <label for="ppw-question-label"><?php echo($question_data['value']); ?></label>
 <!--                            <form>-->

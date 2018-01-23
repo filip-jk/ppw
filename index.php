@@ -29,6 +29,8 @@ class Polynia_Product_Wizard {
 
 	function __construct() {
 
+		$this->load_functions();
+
 		// Register custom post types
 
 		$this->register_post_type();
@@ -58,19 +60,10 @@ class Polynia_Product_Wizard {
 
 		$this->load_shortcode();
 
-		$this->load_functions();
-
 		add_filter( 'manage_polynia_posts_columns', array( $this, 'register_post_type_columns' ) ); // manage_{post_type_slug}_posts_columns
 		add_action( 'manage_polynia_posts_custom_column', array( $this, 'manage_post_type_columns' ), 10, 2 ); // manage_{post_type_slug}_posts_custom_columns
 
 
-//		$get = get_option('ppw_settings');;
-//		echo '<div>';
-//print_r($get);
-//echo '</div>';
-//
-//echo $get;
-//debug_to_console($get);
 	}
 
 	/**
@@ -159,13 +152,12 @@ class Polynia_Product_Wizard {
 			'hierarchical' => true,
 			'has_archive' => false,
 			'menu_icon' => 'dashicons-list-view',
-			'supports' => array( 'title' ),
+			'supports' => array( 'title' , 'thumbnail'),
 			'exclude_from_search' => true,
 			'show_in_nav_menus' => false,
 			'show_in_menu' => true,
 			'show_in_admin_bar' => false,
 			'has_archive' => false,
-			'public' => true,
 			'publicly_queryable' => true,
 			'rewrite' => false,
 			'labels' => array(
@@ -175,6 +167,7 @@ class Polynia_Product_Wizard {
 		);
 
 		register_post_type( 'polynia' , $args );
+
 
 	}
 

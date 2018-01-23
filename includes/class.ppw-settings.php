@@ -68,10 +68,6 @@ class PPW_Settings {
 
 	function ajax_load_default_question_groups() {
 
-//		$ppw_products = new PPW_Products();
-
-//		$data = $ppw_products->remove_all_default_posts();
-
 		$questions = new PPW_Question();
 
 		$get_options = get_option('ppw_settings');
@@ -92,7 +88,7 @@ class PPW_Settings {
 
 		update_option( 'ppw_settings', $get_options );
 
-		$data = 'hehe';
+		$data = 'Loaded';
 
 		$response = array(
 			'response' => $data
@@ -157,6 +153,15 @@ class PPW_Settings {
 
 	public function add_options_page_question( $meta_boxes ) {
 
+		//to be done - set questions groups and preload them
+		if(ppw_option('ppw-group-number' ) == 'undefined') {
+			$get_options = get_option('ppw_settings');
+
+			debug_to_console('hehe');
+
+			$get_options[ 'ppw-group-number' ] = 1;
+			update_option( 'ppw_settings', $get_options );
+		}
 
 		$meta_boxes[] = array(
 			'id'             => $this->prefix . 'question-settings',
@@ -197,10 +202,6 @@ class PPW_Settings {
 		$groups_number = ppw_option('ppw-group-number' );
 
 
-
-
-
-
 		//tmp checking, should be only positive decimal number
 		if( $groups_number !== NULL) {
 
@@ -220,10 +221,6 @@ class PPW_Settings {
 			}
 
 		}
-
-
-
-		//if ( get_post_meta( $form_id, $prefix . 'address2', true ) == true )
 
 		return $meta_boxes;
 	}

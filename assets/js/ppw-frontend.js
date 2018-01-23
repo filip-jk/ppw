@@ -34,6 +34,8 @@
 
                         var response_data = response['data'];
 
+                        num_of_groups = response['groups'];
+
                         products = init_products( response_data );
 
                         init_form();
@@ -57,12 +59,20 @@
 
         $( '#ppw-button-next' ).on( 'click', function() {
 
-            //to be sure all data is loaded
-            if ( ! $( this ).hasClass( 'disabled' ) ) {
+            if( validate_selection() ) {
 
-                count_points( groups[ page ], products );
-                change_progress( 1 );
-                load_questions( page, page-1, groups);
+                //to be sure all data is loaded
+                if ( ! $( this ).hasClass( 'disabled' ) ) {
+
+                    count_points( groups[ page ], products );
+                    change_progress( 1 );
+                    load_questions( page, page-1, groups);
+
+                }
+
+            } else {
+
+                alert('Please fill in the form')
 
             }
 
@@ -71,22 +81,89 @@
 
         $( '#ppw-button-back' ).on( 'click', function() {
 
-            change_progress( -1 );
-            count_points( groups[ page ], products, -1);
-            load_questions( page, page+1, groups);
+            change_progress(-1);
+            load_questions(page, page + 1, groups);
+
+            if( validate_selection() ) {
+
+                count_points(groups[page], products, -1);
+
+            } else {
+
+            }
 
         });
 
         $( '#ppw-button-finish' ).on( 'click', function() {
 
-            count_points( groups[ page ], products );
-            change_progress( 1 );
-            load_questions( page, page-1, groups);
-            show_results();
+            if( validate_selection() ) {
+                console.log('ok');
+                count_points(groups[page], products);
+                change_progress(1);
+                load_questions(page, page - 1, groups);
+                show_results();
+
+            } else {
+
+            }
+
         });
 
+        /**
+         * radio buttons validation
+         *
+         * @return boolean
+         */
 
-        //if AJAX is successful initialize things
+        function validate_selection(){
+
+            var i = 1;
+            var count = 1;
+            var questions = 1;
+
+            $( '#ppw-form' ).find( '.ppw-input-holder' ).each( function() {
+
+                var question_id = 'ppw-q' + i++;
+                var input_name = question_id + '-form';
+
+                if( !$( this ).hasClass('hidden')) {
+
+                    questions++;
+
+                    if ($('input[name='+ input_name + ']:checked').length > 0) {
+
+                        count++;
+
+                    } else {
+
+                        return false;
+
+                    }
+
+                } else {
+
+
+                }
+
+            });
+
+
+            if( count < questions) {
+                return false;
+            } else {
+                return true;
+            }
+
+            //return true;
+
+        }
+
+
+        /**
+         * if AJAX is successful initialize things
+         *
+         */
+
         function init_form() {
 
             init_questions();
@@ -289,6 +366,7 @@
                 }
             );
 
+            //products to show
             var show_number = 3;
 
             for( var product_num in products) {
