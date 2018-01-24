@@ -97,7 +97,7 @@
         $( '#ppw-button-finish' ).on( 'click', function() {
 
             if( validate_selection() ) {
-                console.log('ok');
+
                 count_points(groups[page], products);
                 change_progress(1);
                 load_questions(page, page - 1, groups);

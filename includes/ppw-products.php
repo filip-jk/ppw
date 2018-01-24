@@ -112,13 +112,19 @@ class PPW_Products {
 
 				if ( get_post_status( $post->ID ) == 'trash' ) {
 
-				wp_delete_post($post->ID, $bypass_trash = true);
+					$resp = wp_delete_post($post->ID, $bypass_trash = true);
+
 
 				} else {
 
 					//removes also post types
-					wp_delete_post($post->ID, $bypass_trash = true);
+					$resp = wp_delete_post($post->ID, $bypass_trash = true);
 
+				}
+
+				if(!$resp || resp == NULL) {
+
+					return false;
 
 				}
 
@@ -127,6 +133,8 @@ class PPW_Products {
 			}
 
 		}
+
+		return true;
 
 	}
 

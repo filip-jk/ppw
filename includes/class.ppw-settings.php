@@ -57,24 +57,53 @@ class PPW_Settings {
 
 		$data = $ppw_products->remove_all_default_posts();
 
-		$response = array(
-			'response' => __( 'Groups loaded correctly!', 'ppw' )
-		);
 
+		if( $data ) {
+
+			$response = array(
+				'response' => __( 'Default products have been removed!', 'ppw' )
+			);
+
+			wp_send_json_success( json_encode( $response ) );
+
+		} else {
+
+			$response = array(
+				'response' => __( 'Failed to remove default products.', 'ppw' )
+			);
+
+			wp_send_json_error( json_encode( $response ) );
+
+		}
+
+
+	}
+
+	//load default questions based on a question object
+
+	function ajax_load_default_question_groups() {
+
+
+		$send_options = $this->load_default_question_groups();
+
+		$response = array(
+			'data' => $send_options
+		);
 
 		wp_send_json_success( json_encode( $response ) );
 
 	}
 
-	function ajax_load_default_question_groups() {
+	private function load_default_question_groups() {
 
 		$questions = new PPW_Question();
 
 		$get_options = get_option('ppw_settings');
-		//update_option( 'ppw_settings', $get );
-		//add_option('ppw_settings', $get);
+		$send_options = [];
 
-		//$get_options['ppw-group-number'] = 3;
+		$get_options = get_option('ppw_settings');
+
+		$get_options[ 'ppw-group-number' ] = $questions->get_default_question_groups();
 
 		foreach ( $questions->get_all_questions() as $question => $data ) {
 
@@ -82,26 +111,20 @@ class PPW_Settings {
 			$group = $data[ 'group' ];
 
 			$get_options[ $qid ] = $group - 1;
+			$send_options[ $qid ] = $group - 1;
 
 		}
 
-
 		update_option( 'ppw_settings', $get_options );
 
-		$data = 'Loaded';
-
-		$response = array(
-			'response' => $data
-		);
-
-		wp_send_json_success( json_encode( $response ) );
+		return $send_options;
 
 	}
 
 	public function add_option_page () {
 
 		$settings_pages[] = array(
-			'id'          => 'ppw-settings',
+			'id'          => $this->prefix . 'settings',
 			'option_name' => 'ppw_settings',
 			'menu_title'  => __( 'Settings', 'ppw' ),
 			'page_title'  => __( 'PPW Plugin Settings', 'ppw' ),
@@ -122,11 +145,10 @@ class PPW_Settings {
 
 	public function add_options_page_main( $meta_boxes ) {
 
-
 		$meta_boxes[] = array(
 			'id'             => $this->prefix . 'main-settings',
 			'title'          => 'API',
-			'settings_pages' => 'ppw-settings',
+			'settings_pages' => $this->prefix . 'settings',
 			'tab'            => 'general',
 
 			'fields' => array(
@@ -153,20 +175,10 @@ class PPW_Settings {
 
 	public function add_options_page_question( $meta_boxes ) {
 
-		//to be done - set questions groups and preload them
-		if(ppw_option('ppw-group-number' ) == 'undefined') {
-			$get_options = get_option('ppw_settings');
-
-			debug_to_console('hehe');
-
-			$get_options[ 'ppw-group-number' ] = 1;
-			update_option( 'ppw_settings', $get_options );
-		}
-
 		$meta_boxes[] = array(
 			'id'             => $this->prefix . 'question-settings',
 			'title'          => 'API',
-			'settings_pages' => 'ppw-settings',
+			'settings_pages' => $this->prefix . 'settings',
 			'tab'            => 'question',
 
 			'fields' => array(
@@ -184,9 +196,23 @@ class PPW_Settings {
 	}
 
 
+	//add fields based on a wizard questions
 	private function construct_metabox( &$meta_boxes ) {
 
 		$questions = new PPW_Question();
+
+		$groups_number = ppw_option('ppw-group-number' );
+
+		//assuming to load all questions data at once
+		if($groups_number == 'undefined' || $groups_number == NULL) {
+
+			load_default_question_groups();
+
+		} else {
+
+			//settings field exists
+
+		}
 
 		$metabox_index = -1;
 		foreach ($meta_boxes as $box) {
@@ -199,10 +225,7 @@ class PPW_Settings {
 
 		}
 
-		$groups_number = ppw_option('ppw-group-number' );
-
-
-		//tmp checking, should be only positive decimal number
+		//should be only positive decimal number
 		if( $groups_number !== NULL) {
 
 			$groups_numbers = range(1, $groups_number);
@@ -213,7 +236,8 @@ class PPW_Settings {
 					'id' => $this->prefix . $question . '-number',
 					'name' => esc_html__( $data[ 'value' ] ),
 					'type' => 'select',
-					'options' => $groups_numbers
+					'options' => $groups_numbers,
+					'std' => $data['group']
 				);
 
 				array_push($meta_boxes[$metabox_index][ 'fields' ], $question_heading);
