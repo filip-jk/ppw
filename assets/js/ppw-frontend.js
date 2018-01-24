@@ -149,12 +149,14 @@
 
 
             if( count < questions) {
-                return false;
-            } else {
-                return true;
-            }
 
-            //return true;
+                return false;
+
+            } else {
+
+                return true;
+
+            }
 
         }
 
@@ -174,7 +176,15 @@
 
             }
 
-           $( '#ppw-button-next' ).removeClass( 'disabled' );
+            if( num_of_groups < 2) {
+
+                $( '#ppw-button-finish' ).removeClass( 'disabled' );
+
+            } else {
+
+                $( '#ppw-button-next' ).removeClass( 'disabled' );
+
+            }
 
         }
 

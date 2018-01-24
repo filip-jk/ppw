@@ -109,7 +109,7 @@ class PPW_Question {
 		0 => 'Exclude'
 	);
 
-	private $deafult_questios_groups = 3;
+	private $deafult_question_groups = 3;
 
 	public function __construct() {
 
@@ -129,9 +129,15 @@ class PPW_Question {
 
 	function get_default_question_groups() {
 
-		return $this->deafult_questios_groups;
+		return $this->deafult_question_groups;
 
     }
+
+	function get_question_number() {
+
+		return count( $this->questions );
+
+	}
 
 }
 

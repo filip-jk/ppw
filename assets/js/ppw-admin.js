@@ -90,6 +90,8 @@
 
                         if ( resp.success ) {
 
+                            $( '#ppw-group-number').val( response[ 'groups' ] );
+
                             set_group_numbers( question_numbers, group_numbers, response[ 'data' ] );
 
                             alert ( 'Groups loaded correctly!' ) ;

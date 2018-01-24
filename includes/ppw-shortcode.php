@@ -43,7 +43,41 @@
 
             ob_start();
 
-		    $num_of_groups = '<span class="ppw-progress-current">1</span><span class="ppw-progress-slash">/</span><span class="ppw-progress-total">3</span>';
+		    $ppw_questions = new PPW_Question();
+		    $questions = $ppw_questions->get_all_questions();
+
+//		    $count_groups = [];
+//
+//		    foreach ( range(1, $ppw_questions->get_question_number()) as $number ) {
+//
+//			    $qid = 'ppw-q' . $number . '-number';
+//
+//			    $value = ppw_option( $qid );
+//
+//			    if( $value != NULL && $value != 'undefined') {
+//
+//				    $count_groups[ $value ] = 0;
+//
+//
+//                } else {
+//
+//			        //qid not exists
+//
+//                }
+//
+//		    }
+//
+//		    $groups_number = count( $count_groups );
+//
+//		    if( $count_groups < 1 ) {
+//
+//			    $groups_number = $ppw_questions->get_question_number();
+//
+//            }
+
+		    $groups_number = ppw_option( 'ppw-group-number' );
+
+		    $num_of_groups = '<span class="ppw-progress-current">1</span><span class="ppw-progress-slash">/</span><span class="ppw-progress-total">' . $groups_number . '</span>';
 
 		    ?>
 
@@ -52,10 +86,6 @@
                     <div id="ppw-progress" class="ppw-progress"> <?php echo( $num_of_groups ); ?>  </div>
 
                     <?php
-
-                    $ppw_questions = new PPW_Question();
-                    $questions = $ppw_questions->get_all_questions();
-                    $groups_number = ppw_option('ppw-group-number' );
 
                     foreach ( $questions as $question => $question_data) {
 
@@ -110,9 +140,35 @@
                         </table>
                     </div>
 
-                    <button class="button pw-button-left ppw-button-prev hidden" id="ppw-button-back" type="button"><?php esc_html_e('Back', 'ppw' ); ?></button>
-                    <button class="button ppw-button-right ppw-button-next disabled"  id="ppw-button-next" type="button"><?php esc_html_e('Next', 'ppw' ); ?></button>
-                    <button class="button ppw-button-right ppw-button-finish hidden" id="ppw-button-finish" type="button"><?php esc_html_e('Get results', 'ppw' ); ?></button>
+                <?php
+
+                $button_back  = ' <button class="button pw-button-left ppw-button-prev hidden" id="ppw-button-back" type="button">' .  esc_html('Back', 'ppw' ) .'</button>';
+
+                $button_next = '<button class="button ppw-button-right ppw-button-next ';
+
+                $button_finish =  '<button class="button ppw-button-right ppw-button-finish ';
+
+                if( $groups_number < 2) {
+
+	                $button_next  = $button_next . 'hidden';
+	                $button_finish = $button_finish . 'disabled';
+
+                } else {
+
+	                $button_next  = $button_next . 'disabled';
+	                $button_finish = $button_finish . 'hidden';
+
+                }
+
+                $button_next = $button_next . ' " id="ppw-button-next" type="button">' . esc_html('Next', 'ppw' ) . '</button>';
+                $button_finish = $button_finish . '" id="ppw-button-finish" type="button">' . esc_html('Get results', 'ppw' ) . '</button>';
+
+                echo $button_back;
+                echo $button_next;
+                echo $button_finish;
+
+                ?>
+
 
                 </form>
 

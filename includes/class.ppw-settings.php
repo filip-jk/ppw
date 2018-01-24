@@ -87,7 +87,8 @@ class PPW_Settings {
 		$send_options = $this->load_default_question_groups();
 
 		$response = array(
-			'data' => $send_options
+			'data' => $send_options[0],
+			'groups' => $send_options[1]
 		);
 
 		wp_send_json_success( json_encode( $response ) );
@@ -100,8 +101,6 @@ class PPW_Settings {
 
 		$get_options = get_option('ppw_settings');
 		$send_options = [];
-
-		$get_options = get_option('ppw_settings');
 
 		$get_options[ 'ppw-group-number' ] = $questions->get_default_question_groups();
 
@@ -117,7 +116,7 @@ class PPW_Settings {
 
 		update_option( 'ppw_settings', $get_options );
 
-		return $send_options;
+		return array( $send_options, $questions->get_default_question_groups() );
 
 	}
 
