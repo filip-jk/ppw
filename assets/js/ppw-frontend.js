@@ -6,6 +6,7 @@
         'use strict';
 
         var num_of_groups = 3;
+        var show_number = 3;
         var page = 1;
 
         //init_questions
@@ -37,6 +38,7 @@
                         num_of_groups = response['groups'];
 
                         products = init_products( response_data );
+
 
                         init_form();
 
@@ -269,6 +271,7 @@
                     var data = {
                         'title' : products_data[ product_num ][ 'title' ],
                         'data' : products_data[ product_num ][ 'data' ],
+                        'thumbnail' : products_data[ product_num ][ 'thumbnail' ],
                         'points' : 0,
                         'excluded' : false
                     }
@@ -376,28 +379,35 @@
 
             //products to show
 
-            var show_number = 3;
+            var max_points = 0;
+            var products_to_show = show_number;
 
             for( var product_num in products) {
 
                 var product = products[product_num]
 
                 //what if some products got the same value?
-                if(product.excluded == false && show_number > 0) {
+                if(product.excluded == false && products_to_show > 0) {
                     var product_description = product.data['ppw-description'][0];
                     var product_recommendation = product.data['ppw-recommendation'][0];
 
-                    console.log(product.title + ' | ' + product.points + ' | ' + product.excluded
-                        + ' | ' + product_description + ' | ' + product_recommendation);
+                    if( products_to_show == show_number) {
+                        max_points = product.points;
+                        var percent = 100;
+                    } else {
+                        var percent = (product.points / max_points * 100.0).toFixed();
+                    }
 
-                    //$('#ppw-results').append( '<p>' + (product.title + ' | ' + product.points + ' | ' + product.excluded
-                    //    + ' | ' + product_description + ' | ' + product_recommendation) + '</p>' );
 
                     // Append to a table
 
+                    // product.thumbnail -> returns product thumbnail url
+                    // percent -> points percent in relation to first product points
+
+
                     $( '#ppw-results table' ).append( '<tr><td><a href="#">' + product.title + '</a></td><td>' + product.points + '</td><td>' + product_description + '</td><td>' + product_recommendation + '</td></tr>');
 
-                    show_number--;
+                    products_to_show--;
                 } else {
                     continue;
                 }

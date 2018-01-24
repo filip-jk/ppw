@@ -170,11 +170,21 @@ class PPW_Products {
 				$post_id = get_the_ID();
 				$post_data = get_post_custom($post_id);
 
+
+				$post_thumbnail = NULL;
+
+				if ( has_post_thumbnail() && !post_password_required() ) {
+
+					$post_thumbnail = wp_get_attachment_url( get_post_thumbnail_id( $post_id ) );
+
+				}
+
 				array_push( $posts,
 					array(
 						'title' => $post_title,
 						'id' => $post_id,
-						'data' => $post_data
+						'data' => $post_data,
+						'thumbnail' => $post_thumbnail
 					)
 				);
 
